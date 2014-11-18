@@ -7,23 +7,34 @@ jQuery(function($) {
 	}
 
 	// google map 初期化
-	$('#gmap').text('GPSデータを取得します...');
+	var basePos = new google.maps.LatLng(34.702, 135.51);
+
+
+	var gmap = new google.maps.Map($('#gmap').get(0), {
+		center: basePos,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		zoom: 17
+	});
+
+
+	// ベースの位置にピンを立てる
+	var baseMaker = new google.maps.Marker({
+		position: basePos,
+		icon: 'icon_base.png'
+	});
+	baseMaker.setMap(gmap);
+
 
 	// gps取得開始
 	navigator.geolocation.getCurrentPosition(function(pos) {
-		var gmap = new google.maps.Map($('#gmap').get(0), {
-			center: new google.maps.LatLng(35, 135),
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			zoom: 17
-		});
-
 		// gps 取得成功
 		var currentPos = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-		
+
 		// 現在位置にピンをたてる
 		var currentMarker = new google.maps.Marker({
 			position: currentPos
 		});
+		//currentMarker.setAnimation(google.maps.Animation.BOUNCE);
 		currentMarker.setMap(gmap);
 
 		// 誤差を円で描く
